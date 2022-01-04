@@ -87,4 +87,15 @@ void loop()
   {
       noTone(pinoBUZZ);
   }  
+// ===================== SENSOR GLP ===================== //
+  
+  if (sensorReadGLP == 0)
+  {
+    tone(pinoBUZZ,500);
+  }
+  else
+  {
+    noTone(pinoBUZZ);
+  }
 }
+
