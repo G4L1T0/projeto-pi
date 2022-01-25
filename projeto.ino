@@ -1,31 +1,54 @@
+int diaenoite = 2;
+int sensorGLP = 3;
+int pinoBUZZ  = 4;
+int sensorLDR = 5;
+int pinoLEDs  = 6;
+
+int pinoLEDQuarto01 = 10;
+int pinoLEDQuarto02 = 11;
+int pinoLEDSala     = 12;
+int pinoLEDBanheiro = 13;
+
 int pinoAnalogicoChuva = A5;
 int pinoAnalogicoSolo = A0;
-int sensorLDR = 5;
-int pinoBUZZ = 4;
 
 int valorpinoChuva;
 int sensorReadLDR;
+int sensorReadGLP;
+int diaenoiteRead;
 int contChuva;
 int contSolo;
 float mediaSolo;
 float mediaChuva;
+float pinoAnalogicoChuvaRead;
+float pinoAnalogicoSoloRead;
 
 void setup()
 {
   pinMode(pinoAnalogicoChuva, INPUT);
   pinMode(pinoAnalogicoSolo, INPUT);
   pinMode(sensorLDR, INPUT);
+  pinMode(sensorGLP, INPUT);
+  pinMode(diaenoite, INPUT);
   pinMode(pinoBUZZ, OUTPUT);
+  pinMode(pinoLEDs, OUTPUT);
+  pinMode(pinoLEDQuarto01, OUTPUT);
+  pinMode(pinoLEDQuarto02, OUTPUT);
+  pinMode(pinoLEDSala, OUTPUT);
+  pinMode(pinoLEDBanheiro, OUTPUT);
+
   Serial.begin(9600);
 }
 
 void loop()
 {
   sensorReadLDR = digitalRead(sensorLDR);
-  pinoAnalogicoChuva = analogRead(pinoAnalogicoChuva);
-  pinoAnalogicoSolo = analogRead(pinoAnalogicoSolo);
-  mediaChuva = pinoAnalogicoChuva + mediaChuva;
-  mediaSolo = pinoAnalogicoSolo + mediaSolo;
+  sensorReadGLP = digitalRead(sensorGLP);
+  diaenoiteRead = digitalRead(diaenoite);
+  pinoAnalogicoChuvaRead = analogRead(pinoAnalogicoChuva);
+  pinoAnalogicoSoloRead = analogRead(pinoAnalogicoSolo);
+  mediaChuva = pinoAnalogicoChuvaRead + mediaChuva;
+  mediaSolo = pinoAnalogicoSoloRead + mediaSolo;
   contChuva++;
   contSolo++;
 
@@ -51,7 +74,7 @@ void loop()
       }
     contChuva = 0;
     mediaChuva = 0;
-  }
+  } 
 
 // ========================= SENSOR SOLO ========================= //
 
@@ -77,16 +100,8 @@ void loop()
     mediaSolo = 0;
   }
 
-// ===================== SENSOR LUMINOSIDADE ===================== //
 
-  if (sensorReadLDR == 1)
-  {
-      tone(pinoBUZZ,500);
-  } 
-  else
-  {
-      noTone(pinoBUZZ);
-  }  
+
 // ===================== SENSOR GLP ===================== //
   
   if (sensorReadGLP == 0)
@@ -97,5 +112,36 @@ void loop()
   {
     noTone(pinoBUZZ);
   }
-}
 
+// ================ SENSOR DIA / NOITE ================== //
+
+   if (diaenoiteRead == 1)
+   {     
+    digitalWrite(pinoLEDQuarto01, HIGH);
+    digitalWrite(pinoLEDQuarto02, HIGH);
+    digitalWrite(pinoLEDBanheiro, HIGH);
+    digitalWrite(pinoLEDSala, HIGH);
+   }
+   else
+   {
+    digitalWrite(pinoLEDQuarto01, LOW);
+    digitalWrite(pinoLEDQuarto02, LOW);
+    digitalWrite(pinoLEDBanheiro, LOW);
+    digitalWrite(pinoLEDSala, LOW); 
+   }
+
+   Serial.println(diaenoiteRead);
+   
+ // ===================== SENSOR LUMINOSIDADE ===================== //
+
+  // if (sensorReadLDR == 1)
+  // {
+  //   tone(pinoBUZZ,500);
+  //   delay(50000);
+  // } 
+  // else
+  // {
+  //    noTone(pinoBUZZ);
+  // }  
+
+}
